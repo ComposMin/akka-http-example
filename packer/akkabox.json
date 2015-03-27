@@ -49,17 +49,17 @@
     {
       "type": "file",
       "source": "scripts/akka-http-example.sh",
-      "destination": "/tmp"
+      "destination": "/tmp/akka-http-example.sh"
     },
     {
       "type": "file",
       "source": "scripts/akka-http-example.sh",
-      "destination": "/tmp"
+      "destination": "/tmp/akka-http-example.sh"
     },
     {
       "type": "file",
       "source": "scripts/akka-http-example",
-      "destination": "/tmp"
+      "destination": "/tmp/akka-http-example"
     },
     {
       "type": "shell",

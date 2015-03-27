@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function usage() {
-  echo './go [build|publish|deploy]'
+  echo './go [build|validate|publish|deploy]'
 }
 
 # ensure SBT is installed
