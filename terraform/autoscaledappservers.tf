@@ -67,8 +67,8 @@ resource "aws_route_table_association" "capability_routeassoc_2" {
     route_table_id = "${aws_route_table.capability_routetab.id}"
 }
 
-resource "aws_security_group" "wideopen" {
-  name = "wideopen"
+resource "aws_security_group" "wide_open" {
+  name = "wide_open"
   description = "Allow any protocol"
   vpc_id = "${aws_vpc.capability_vpc.id}"
 
@@ -105,19 +105,24 @@ resource "aws_security_group" "web_standard_ports" {
       cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-      from_port = 443
-      to_port = 443
-      protocol = "-1"    #Any protocol
-      cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-      from_port = 8080
-      to_port = 8090
-      protocol = "-1"    #Any protocol
-      cidr_blocks = ["0.0.0.0/0"]
-  }
+# TODO: When the following rules are in place, get the following error
+# after consideration, this isn't important, because the ELB receives on port 80 only
+# aws_security_group.web_standard_ports: Error: Error authorizing security group ingress rules:
+# The same permission must not appear multiple times (InvalidParameterValue)
+#
+#  ingress {
+#      from_port = 443
+#      to_port = 443
+#      protocol = "-1"    #Any protocol
+#      cidr_blocks = ["0.0.0.0/0"]
+#  }
+#
+#  ingress {
+#      from_port = 8080
+#      to_port = 8090
+#      protocol = "-1"    #Any protocol
+#      cidr_blocks = ["0.0.0.0/0"]
+#  }
 }
 
 ###---- TODO: Push the above into a standard module, so that it can be reused
@@ -129,45 +134,46 @@ resource "aws_security_group" "web_standard_ports" {
 #   ttl = "300"
 #   records = ["${aws_elb.capability_www.dns_name}"]
 #}
-#
-#resource "aws_elb" "capability_www" {
-#  name = "webapplicationentry"
-#  # Attaching subnets determines which VPC the ELB ends up in. Do it! Or it ends up in the default VPC
-#  subnets = ["${aws_subnet.capability_subnet_a.id}", "${aws_subnet.capability_subnet_b.id}"]
-#  security_groups = ["${aws_security_group.web_standard_ports.id}"]
-#  listener {
-#    instance_port = 8080
-#    instance_protocol = "http"
-#    lb_port = 80
-#    lb_protocol = "http"
-#  }
-#  health_check {
-#    healthy_threshold = 4
-#    unhealthy_threshold = 2
-#    timeout = 2
-#    target = "HTTP:8080/blah"
-#    interval = 5
-#  }
-#}
-#
-#resource "aws_launch_configuration" "as_conf" {
-#    name = "small_app_server_cluster"
-#    image_id = "${var.app_server_ami}"
-#    instance_type = "t1.micro"
-#    key_name = "cfegan_cdenv"
-#    security_groups = [ "wide_open" ]
-#}
-#
-#
-#resource "aws_autoscaling_group" "scaleout_web_app" {
-#  availability_zones = [ "ap-southeast-2a", "ap-southeast-2b" ]
-#  name = "autoscaledappservers"
-#  max_size = 1
-#  min_size = 1
-#  health_check_grace_period = 300
-#  health_check_type = "ELB"
-#  force_delete = true
-#  launch_configuration = "${aws_launch_configuration.as_conf.name}"
-#  load_balancers = [ "${aws_elb.capability_www.name}" ]
-#  vpc_zone_identifier = [ "${aws_subnet.capability_subnet_a.id}", "${aws_subnet.capability_subnet_b.id}" ]
-#}
+
+resource "aws_elb" "capability_www" {
+  name = "webapplicationentry"
+  # Attaching subnets determines which VPC the ELB ends up in. Do it! Or it ends up in the default VPC
+  subnets = ["${aws_subnet.capability_subnet_a.id}", "${aws_subnet.capability_subnet_b.id}"]
+  security_groups = ["${aws_security_group.web_standard_ports.id}"]
+  listener {
+    instance_port = 8080
+    instance_protocol = "http"
+    lb_port = 80
+    lb_protocol = "http"
+  }
+  health_check {
+    healthy_threshold = 4
+    unhealthy_threshold = 2
+    timeout = 2
+    target = "HTTP:8080/blah"
+    interval = 5
+  }
+}
+
+resource "aws_launch_configuration" "as_conf" {
+    name = "small_app_server_cluster"
+    image_id = "${var.app_server_ami}"
+    instance_type = "t1.micro"
+    key_name = "${var.ssh_key_name}"
+    # TODO: Restrict to a more sensible sercurity group definition
+    security_groups = [ "${aws_security_group.wide_open.id}" ]
+}
+
+
+resource "aws_autoscaling_group" "scaleout_web_app" {
+  availability_zones = [ "ap-southeast-2a", "ap-southeast-2b" ]
+  name = "autoscaledappservers"
+  max_size = 1
+  min_size = 1
+  health_check_grace_period = 300
+  health_check_type = "ELB"
+  force_delete = true
+  launch_configuration = "${aws_launch_configuration.as_conf.name}"
+  load_balancers = [ "${aws_elb.capability_www.name}" ]
+  vpc_zone_identifier = [ "${aws_subnet.capability_subnet_a.id}", "${aws_subnet.capability_subnet_b.id}" ]
+}

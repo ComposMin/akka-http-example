@@ -13,5 +13,7 @@ variable "capability_subnet_b_cidr" {}
 
 variable "app_server_ami" {}
 
+variable "ssh_key_name" {}
+
 
 
