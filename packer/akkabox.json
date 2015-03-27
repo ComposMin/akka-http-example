@@ -43,15 +43,34 @@
     },
     {
       "type": "file",
-      "source": "target/scala-2.11/akkaHttpExample-assembly-1.0.0.jar",
+      "source": "../target/scala-2.11/akkaHttpExample-assembly-1.0.0.jar",
+      "destination": "/tmp/akkaHttpExample.jar"
+    },
+    {
+      "type": "file",
+      "source": "scripts/akka-http-example.sh",
+      "destination": "/tmp"
+    },
+    {
+      "type": "file",
+      "source": "scripts/akka-http-example.sh",
+      "destination": "/tmp"
+    },
+    {
+      "type": "file",
+      "source": "scripts/akka-http-example",
       "destination": "/tmp"
     },
     {
       "type": "shell",
       "inline": [
         "set -x -e",
-        "mkdir -p /opt/akka-http-example",
-        "mv /tmp/akkaHttpExample*assembly*jar /opt/akka-http-example"
+        "sudo mkdir -p /opt/akka-http-example",
+        "sudo mv /tmp/akkaHttpExample.jar /opt/akka-http-example",
+        "sudo mv /tmp/akka-http-example.sh /opt/akka-http-example",
+        "sudo chmod +x /opt/akka-http-example/akka-http-example.sh",
+        "sudo mv /tmp/akka-http-example /etc/init.d/akka-http-example",
+        "sudo chmod +x /etc/init.d/akka-http-example"
       ]
     }
   ]

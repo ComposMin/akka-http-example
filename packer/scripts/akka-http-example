@@ -1,0 +1,66 @@
+#!/bin/bash
+#
+# akka-http-example Simple web application demonstrating Akka library
+#
+# description: akka-http-example Simple web application demonstrating Akka library
+#
+# chkconfig: 2345 80 30
+
+# Source function library.
+. /etc/init.d/functions
+
+prog=akka-http-example
+lockfile=/var/lock/subsys/$prog
+
+start() {
+	[ "$EUID" != "0" ] && exit 4
+	[ "$NETWORKING" = "no" ] && exit 1
+	[ -x /usr/bin/java ] || exit 5
+
+        # Start daemon.
+        echo -n $"Starting $prog: "
+        daemon /opt/akka-http-example/akka-http-example.sh && success || failure
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch $lockfile
+	return $RETVAL
+}
+
+stop() {
+	[ "$EUID" != "0" ] && exit 4
+        echo -n $"Shutting down $prog: "
+	killproc $prog
+	RETVAL=$?
+        echo
+	[ $RETVAL -eq 0 ] && rm -f $lockfile
+	return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status $prog
+	;;
+  restart|force-reload)
+	stop
+	start
+	;;
+  try-restart|condrestart)
+	if status $prog > /dev/null; then
+	    stop
+	    start
+	fi
+	;;
+  reload)
+	exit 3
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|status|restart|try-restart|force-reload}"
+	exit 2
+esac
