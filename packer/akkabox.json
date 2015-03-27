@@ -70,7 +70,8 @@
         "sudo mv /tmp/akka-http-example.sh /opt/akka-http-example",
         "sudo chmod +x /opt/akka-http-example/akka-http-example.sh",
         "sudo mv /tmp/akka-http-example /etc/init.d/akka-http-example",
-        "sudo chmod +x /etc/init.d/akka-http-example"
+        "sudo chmod +x /etc/init.d/akka-http-example",
+        "sudo chkconfig --add akka-http-example"
       ]
     }
   ]
