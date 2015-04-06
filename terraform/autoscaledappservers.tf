@@ -22,8 +22,8 @@ resource "aws_subnet" "capability_subnet_a" {
     vpc_id = "${aws_vpc.capability_vpc.id}"
     cidr_block = "${var.capability_subnet_a_cidr}"
     availability_zone = "ap-southeast-2a"
-    # TODO: Turn this off for work scenarios
-    map_public_ip_on_launch = true
+    # Set to false for Corpname scenarios, where external network connectivity not allowed
+    map_public_ip_on_launch = false
 
     tags {
         Name = "${var.capability_name}_subnet_a"
@@ -34,8 +34,8 @@ resource "aws_subnet" "capability_subnet_b" {
     vpc_id = "${aws_vpc.capability_vpc.id}"
     cidr_block = "${var.capability_subnet_b_cidr}"
     availability_zone = "ap-southeast-2b"
-    # TODO: Turn this off for work scenarios
-    map_public_ip_on_launch = true
+    # Set to false for Corpname scenarios, where external network connectivity not allowed
+    map_public_ip_on_launch = false
 
     tags {
         Name = "${var.capability_name}_subnet_b"
@@ -45,16 +45,15 @@ resource "aws_subnet" "capability_subnet_b" {
 # Create a peering pcx - might need to be done as a second phase
 # and then added to the routing table
 #
-resource "aws_internet_gateway" "capability_igw" {
-    vpc_id = "${aws_vpc.capability_vpc.id}"
-}
 
 resource "aws_route_table" "capability_routetab" {
     vpc_id = "${aws_vpc.capability_vpc.id}"
-    route {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = "${aws_internet_gateway.capability_igw.id}"
-    }
+# TODO: Fill in route details after VPC Peering done and PCX value known
+#    route {
+#        cidr_block = "0.0.0.0/0"
+#        # Route all traffic out via the parents pcx
+#        gateway_id = "${var.parent_external_pcx}"
+#    }
 }
 
 resource "aws_route_table_association" "capability_routeassoc_1" {
@@ -104,25 +103,6 @@ resource "aws_security_group" "web_standard_ports" {
       protocol = "-1"    #Any protocol
       cidr_blocks = ["0.0.0.0/0"]
   }
-
-# TODO: When the following rules are in place, get the following error
-# after consideration, this isn't important, because the ELB receives on port 80 only
-# aws_security_group.web_standard_ports: Error: Error authorizing security group ingress rules:
-# The same permission must not appear multiple times (InvalidParameterValue)
-#
-#  ingress {
-#      from_port = 443
-#      to_port = 443
-#      protocol = "-1"    #Any protocol
-#      cidr_blocks = ["0.0.0.0/0"]
-#  }
-#
-#  ingress {
-#      from_port = 8080
-#      to_port = 8090
-#      protocol = "-1"    #Any protocol
-#      cidr_blocks = ["0.0.0.0/0"]
-#  }
 }
 
 ###---- TODO: Push the above into a standard module, so that it can be reused
@@ -140,6 +120,10 @@ resource "aws_elb" "capability_www" {
   # Attaching subnets determines which VPC the ELB ends up in. Do it! Or it ends up in the default VPC
   subnets = ["${aws_subnet.capability_subnet_a.id}", "${aws_subnet.capability_subnet_b.id}"]
   security_groups = ["${aws_security_group.web_standard_ports.id}"]
+
+  # Corpname scenarios, external network connectivity not allowed directly from this ELB
+  internal = true
+
   listener {
     instance_port = 8080
     instance_protocol = "http"

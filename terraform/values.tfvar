@@ -2,3 +2,9 @@ capability_name="pos"
 capability_vpc_cidr="10.10.104.0/24"
 capability_subnet_a_cidr="10.10.104.0/28"
 capability_subnet_b_cidr="10.10.104.16/28"
+# TODO: Fill in this value after VPC peering done and PCX known
+parent_external_pcx="pcx-unknown"
+
+# After executing ./requestvpcpeering.sh you will get back a value for the PCX
+# the following is an example
+# parent_external_pcx="pcx-f58f7d9c"
