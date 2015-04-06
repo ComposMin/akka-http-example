@@ -8,8 +8,8 @@ object Version {
   val scalaTest    = "2.2.4"
 
 
-  val httpCore     = "1.0-M4"
-  val akkaStream   = "1.0-M4"
+  val http     = "1.0-M5"
+  val akkaStream   = "1.0-M5"
 }
 
 object Library {
@@ -21,7 +21,7 @@ object Library {
   val scalaParsers    = "org.scala-lang.modules" %% "scala-parser-combinators"      % Version.scalaParsers
   val scalaTest       = "org.scalatest"          %% "scalatest"                     % Version.scalaTest
 
-  val httpCore        = "com.typesafe.akka"      %% "akka-http-core-experimental"   % Version.httpCore
+  val httpCore        = "com.typesafe.akka"      %% "akka-http-experimental"        % Version.http
   val akkaStream      = "com.typesafe.akka"      %% "akka-stream-experimental"      % Version.akkaStream
 }
 
