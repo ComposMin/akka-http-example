@@ -135,7 +135,7 @@ resource "aws_elb" "capability_www" {
     unhealthy_threshold = 2
     timeout = 2
     target = "HTTP:8080/blah"
-    interval = 5
+    interval = 30
   }
 }
 
