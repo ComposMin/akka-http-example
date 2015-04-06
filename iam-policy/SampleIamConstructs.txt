@@ -1,0 +1,61 @@
+Amazon Default Role : IAMReadOnlyAccess
+- TODO : Check if we need extra Allowed actions to delegate a role to an EC2 instance (e.g. for a build agent)
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:List*",
+                "iam:Get*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+
+Amazon Default Role : AmazonEC2FullAccess
+- cloudwatch required to do dynamic autoscale groups
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "ec2:*",
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "elasticloadbalancing:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "cloudwatch:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "autoscaling:*",
+            "Resource": "*"
+        }
+    ]
+}
+
+# This example just shows how negation works, so that you can specific "everything except"
+
+Amazon Default Role : PowerUserAccess
+- everything except IAM
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "NotAction": "iam:*",
+            "Resource": "*"
+        }
+    ]
+}
