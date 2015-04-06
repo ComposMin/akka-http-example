@@ -1,14 +1,15 @@
 
-import akka.actor.{ Actor, ActorRef, ActorSystem, Props }
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import akka.http.Http
-import akka.http.Http.{ IncomingConnection, ServerBinding }
+import akka.http.Http.{IncomingConnection, ServerBinding}
 import akka.http.model.HttpMethods._
 import akka.http.model._
-import akka.stream.ActorFlowMaterializer
+import akka.http.server.Directives._
+import akka.stream.{FlowMaterializer, ActorFlowMaterializer}
 import akka.stream.scaladsl._
 import akka.util.Timeout
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 
 object Main extends App {
@@ -19,14 +20,20 @@ object Main extends App {
 
   val delayer = system.actorOf(Props[RequestDelayingActor])
 
-  val bindingFuture: Source[IncomingConnection, Future[ServerBinding]] = Http(system).bind(interface = "0.0.0.0", port = 8080)
+  val server: Source[IncomingConnection, Future[ServerBinding]] = Http(system).bind(interface = "0.0.0.0", port = 8080)
 
-  bindingFuture runForeach { (connection: IncomingConnection) =>
+  server.runForeach { (connection: IncomingConnection) =>
 
     val handlerFlow = Flow[HttpRequest].via(delayMatched(predicate)).map(Routes.requestHandler)
 
     connection.handleWith(handlerFlow)
   }
+
+  import system.dispatcher
+  Http(system).bindAndHandle(route, "127.0.0.1", 8081)
+
+  private def route(implicit ec: ExecutionContext, mat: FlowMaterializer) =
+    getFromResourceDirectory("web") ~ path("")(getFromResource("web/index.html"))
 
   def predicate(httpRequest: HttpRequest): Boolean = {
     httpRequest match {
@@ -46,7 +53,7 @@ object Main extends App {
 
   def delayMatched[T](p: T => Boolean): Flow[T, T, Unit] = {
     Flow() { implicit builder =>
-      import FlowGraph.Implicits._
+      import akka.stream.scaladsl.FlowGraph.Implicits._
 
       val split = builder.add(Flipper(p))
       val slowLane = builder.add(throttle[T](600 millis))
