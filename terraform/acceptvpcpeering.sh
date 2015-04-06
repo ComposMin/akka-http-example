@@ -15,6 +15,8 @@ if [ X${CONTINUE} == "XY" ]; then
     aws ec2 accept-vpc-peering-connection --no-dry-run --vpc-peering-connection-id ${PCX_ID}
 
 else
+    echo "Only doing a dry run of the command to check likely success"
+    echo
     aws ec2 accept-vpc-peering-connection --dry-run --vpc-peering-connection-id ${PCX_ID}
 
 fi
