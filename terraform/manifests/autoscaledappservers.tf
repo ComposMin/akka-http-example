@@ -82,18 +82,18 @@ resource "aws_elb" "capability_www" {
     lb_protocol = "http"
   }
   health_check {
-    healthy_threshold = 4
-    unhealthy_threshold = 2
-    timeout = 2
+    healthy_threshold = 2
+    unhealthy_threshold = 10
+    timeout = 3
     target = "HTTP:8080/blah"
-    interval = 30
+    interval = 300
   }
 }
 
 resource "aws_launch_configuration" "as_conf" {
     name = "small_app_server_cluster"
     image_id = "${var.app_server_ami}"
-    instance_type = "t1.micro"
+    instance_type = "t2.small"
     key_name = "${var.ssh_key_name}"
     # TODO: Restrict to a more sensible sercurity group definition
     security_groups = [ "${aws_security_group.wide_open.id}" ]

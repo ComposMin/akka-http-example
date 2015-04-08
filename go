@@ -13,11 +13,11 @@ if [ X$1 == 'Xbuild' ]; then
 
 elif [ X$1 == 'Xpackage' ]; then
   cd packer
-  packer build -var 'source_ami=ami-ff9cecc5' akkabox.json
+  packer build -var 'source_ami=ami-fd9cecc7' akkabox.json
 
 elif [ X$1 == 'Xvalidate' ]; then
   cd packer
-  packer validate -var 'source_ami=ami-ff9cecc5' akkabox.json
+  packer validate -var 'source_ami=ami-fd9cecc7' akkabox.json
 
 elif [ X$1 == 'Xpublish' ]; then
   echo TODO: publish
