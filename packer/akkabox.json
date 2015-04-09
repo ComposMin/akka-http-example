@@ -1,6 +1,7 @@
 {
   "variables": {
-    "source_ami": ""
+    "source_ami": "",
+    "subnet_id": ""
   },
   "builders": [
     {
@@ -26,6 +27,7 @@
       },
       "ssh_timeout": "10m",
       "region": "ap-southeast-2",
+      "subnet_id": "{{user `subnet_id`}}",
       "ami_users": [
         "911868327851"
       ],

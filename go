@@ -17,7 +17,7 @@ elif [ X$1 == 'Xpackage' ]; then
 
 elif [ X$1 == 'Xvalidate' ]; then
   cd packer
-  packer validate -var 'source_ami=ami-ff9cecc5' akkabox.json
+  packer validate -var 'source_ami=ami-ff9cecc5' -var 'subnet_id=subnet-cb18ccae' akkabox.json
 
 elif [ X$1 == 'Xpublish' ]; then
   echo TODO: publish
