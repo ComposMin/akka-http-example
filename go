@@ -13,7 +13,7 @@ if [ X$1 == 'Xbuild' ]; then
 
 elif [ X$1 == 'Xpackage' ]; then
   cd packer
-  packer build --debug -var 'source_ami=ami-fd9cecc7'  -var 'subnet_id=subnet-cb18ccae' -var 'security_group_id=sg-e1b91c84' akkabox.json
+  packer build -var 'source_ami=ami-fd9cecc7'  -var 'subnet_id=subnet-cb18ccae' -var 'security_group_id=sg-e1b91c84' akkabox.json
 
 elif [ X$1 == 'Xvalidate' ]; then
   cd packer

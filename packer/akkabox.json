@@ -10,16 +10,6 @@
       "instance_type": "t2.small",
       "ssh_username": "ec2-user",
       "ami_name": "akka-http-example {{timestamp}}",
-      "ami_block_device_mappings": [ {
-        "device_name": "/dev/sda1",
-        "volume_size": 100,
-        "delete_on_termination": true
-      } ],
-      "launch_block_device_mappings": [ {
-        "device_name": "/dev/sda1",
-        "volume_size": 100,
-        "delete_on_termination": true
-      } ],
       "run_tags": {
         "Name": "Packer builder"
       },
