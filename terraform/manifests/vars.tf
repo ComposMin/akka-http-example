@@ -15,5 +15,7 @@ variable "app_server_ami" {}
 
 variable "ssh_key_name" {}
 
+variable "parent_external_pcx" {}
+
 
 

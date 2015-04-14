@@ -1,4 +1,0 @@
-capability_name="pos"
-capability_vpc_cidr="10.10.104.0/24"
-capability_subnet_a_cidr="10.10.104.0/28"
-capability_subnet_b_cidr="10.10.104.16/28"
