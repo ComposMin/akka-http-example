@@ -14,7 +14,6 @@ module "capability_dev1_net" {
     capability_vpc_cidr = "${var.capability_vpc_cidr}"
     capability_subnet_a_cidr = "${var.capability_subnet_a_cidr}"
     capability_subnet_b_cidr = "${var.capability_subnet_b_cidr}"
-    parent_external_pcx = "${var.parent_external_pcx}"
 }
 
 resource "aws_security_group" "wide_open" {
@@ -58,22 +57,19 @@ resource "aws_security_group" "web_standard_ports" {
 
 ###---- TODO: Push the above into a standard module, so that it can be reused
 
-#resource "aws_route53_record" "capability_www_dns" {
-#   zone_id = "Z2KQQ9G95L92Q3"   # TODO: make an input variable
-#   name = "${var.capability_name}.composmin.net"
-#   type = "CNAME"
-#   ttl = "300"
-#   records = ["${aws_elb.capability_www.dns_name}"]
-#}
+resource "aws_route53_record" "capability_www_dns" {
+   zone_id = "${var.dns_zone_id}"
+   name = "${var.www_dns_prefix}.{var.www_dns_suffix}"
+   type = "CNAME"
+   ttl = "60"
+   records = ["${aws_elb.capability_www.dns_name}"]
+}
 
 resource "aws_elb" "capability_www" {
   name = "webapplicationentry"
   # Attaching subnets determines which VPC the ELB ends up in. Do it! Or it ends up in the default VPC
   subnets = [ "${module.capability_dev1_net.subnet_a_id}", "${module.capability_dev1_net.subnet_b_id}" ]
   security_groups = [ "${aws_security_group.web_standard_ports.id}" ]
-
-  # Corpname scenarios, external network connectivity not allowed directly from this ELB
-  internal = true
 
   listener {
     instance_port = 8080
@@ -85,7 +81,7 @@ resource "aws_elb" "capability_www" {
     healthy_threshold = 2
     unhealthy_threshold = 10
     timeout = 3
-    target = "HTTP:8080/blah"
+    target = "HTTP:8080/status"
     interval = 300
   }
 }

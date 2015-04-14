@@ -15,7 +15,9 @@ variable "app_server_ami" {}
 
 variable "ssh_key_name" {}
 
-variable "parent_external_pcx" {}
+variable "dns_zone_id" {}
 
+variable "www_dns_prefix" {}
 
+variable "www_dns_suffix" {}
 

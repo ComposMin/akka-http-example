@@ -2,14 +2,5 @@ capability_name="pos"
 capability_vpc_cidr="10.10.104.0/24"
 capability_subnet_a_cidr="10.10.104.0/28"
 capability_subnet_b_cidr="10.10.104.16/28"
-# Sequence of steps to setup VPC peering
-#
-# 1) Execute the Peering request script
-# ./requestvpcpeering.sh
-# 2) Fill in the value below from the output of the above script
-# 3) Alter the terraform routing to use the parent_external_pcx
-# 4) Re-run the terraform application
-# ./terra.sh
-# TODO: Fill in this value after VPC peering done and PCX known
-parent_external_pcx="pcx-f58f7d9c"
-
+dns_zone_id="Z2KQQ9G95L92Q3"
+www_dns_suffix="composmin.net"

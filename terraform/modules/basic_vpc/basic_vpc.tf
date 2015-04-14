@@ -12,6 +12,10 @@ resource "aws_vpc" "capability_vpc" {
     }
 }
 
+resource "aws_internet_gateway" "capability_igw" {
+    vpc_id = "${aws_vpc.capability_vpc.id}"
+}
+
 resource "aws_subnet" "capability_subnet_a" {
     vpc_id = "${aws_vpc.capability_vpc.id}"
     cidr_block = "${var.capability_subnet_a_cidr}"
@@ -36,18 +40,12 @@ resource "aws_subnet" "capability_subnet_b" {
     }
 }
 
-# Create a peering pcx - might need to be done as a second phase
-# and then added to the routing table
-#
-
 resource "aws_route_table" "capability_routetab" {
     vpc_id = "${aws_vpc.capability_vpc.id}"
-# TODO: Fill in route details after VPC Peering done and PCX value known
-#    route {
-#        cidr_block = "0.0.0.0/0"
-#        # Route all traffic out via the parents pcx
-#        gateway_id = "${var.parent_external_pcx}"
-#    }
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = "${aws_internet_gateway.capability_igw.id}"
+    }
 }
 
 resource "aws_route_table_association" "capability_routeassoc_1" {
