@@ -59,7 +59,7 @@ resource "aws_security_group" "web_standard_ports" {
 
 resource "aws_route53_record" "capability_www_dns" {
    zone_id = "${var.dns_zone_id}"
-   name = "${var.www_dns_prefix}.{var.www_dns_suffix}"
+   name = "${var.www_dns_prefix}.${var.www_dns_suffix}"
    type = "CNAME"
    ttl = "60"
    records = ["${aws_elb.capability_www.dns_name}"]
