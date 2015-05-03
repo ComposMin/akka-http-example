@@ -1,0 +1,7 @@
+capability_name="pos2"
+capability_vpc_cidr="10.10.104.0/24"
+capability_subnet_a_cidr="10.10.104.0/28"
+capability_subnet_b_cidr="10.10.104.16/28"
+dns_zone_id="Z2KQQ9G95L92Q3"
+www_dns_prefix="dev2"
+www_dns_suffix="composmin.net"

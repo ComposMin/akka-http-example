@@ -57,15 +57,3 @@ resource "aws_route_table_association" "capability_routeassoc_2" {
     subnet_id = "${aws_subnet.capability_subnet_b.id}"
     route_table_id = "${aws_route_table.capability_routetab.id}"
 }
-
-output "vpc_id" {
-    value = "${aws_vpc.capability_vpc.id}"
-}
-
-output "subnet_a_id" {
-    value = "${aws_subnet.capability_subnet_a.id}"
-}
-
-output "subnet_b_id" {
-    value = "${aws_subnet.capability_subnet_b.id}"
-}

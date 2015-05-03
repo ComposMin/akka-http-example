@@ -1,25 +1,8 @@
 
-# Specify the provider and access details
-provider "aws" {
-    access_key = "${var.aws_access_key}"
-    secret_key = "${var.aws_secret_key}"
-    region = "ap-southeast-2"
-}
-
-
-module "capability_dev1_net" {
-    source = "../modules/basic_vpc"
-
-    capability_name = "${var.capability_name}"
-    capability_vpc_cidr = "${var.capability_vpc_cidr}"
-    capability_subnet_a_cidr = "${var.capability_subnet_a_cidr}"
-    capability_subnet_b_cidr = "${var.capability_subnet_b_cidr}"
-}
-
 resource "aws_security_group" "wide_open" {
   name = "wide_open"
   description = "Allow any protocol"
-  vpc_id = "${module.capability_dev1_net.vpc_id}"
+  vpc_id = "${var.vpc_id}"
 
   ingress {
       from_port = 0
@@ -32,7 +15,7 @@ resource "aws_security_group" "wide_open" {
 resource "aws_security_group" "ssh_from_anywhere" {
   name = "ssh_from_anywhere"
   description = "Allow SSH from anywhere"
-  vpc_id = "${module.capability_dev1_net.vpc_id}"
+  vpc_id = "${var.vpc_id}"
 
   ingress {
       from_port = 22
@@ -45,7 +28,7 @@ resource "aws_security_group" "ssh_from_anywhere" {
 resource "aws_security_group" "web_standard_ports" {
   name = "web_standard_ports"
   description = "Allow standard web ports from anywhere"
-  vpc_id = "${module.capability_dev1_net.vpc_id}"
+  vpc_id = "${var.vpc_id}"
 
   ingress {
       from_port = 80
@@ -68,7 +51,7 @@ resource "aws_route53_record" "capability_www_dns" {
 resource "aws_elb" "capability_www" {
   name = "webapplicationentry"
   # Attaching subnets determines which VPC the ELB ends up in. Do it! Or it ends up in the default VPC
-  subnets = [ "${module.capability_dev1_net.subnet_a_id}", "${module.capability_dev1_net.subnet_b_id}" ]
+  subnets = [ "${var.subnet_a_id}", "${var.subnet_b_id}" ]
   security_groups = [ "${aws_security_group.web_standard_ports.id}" ]
 
   listener {
@@ -99,13 +82,12 @@ resource "aws_launch_configuration" "as_conf" {
 resource "aws_autoscaling_group" "scaleout_web_app" {
   availability_zones = [ "ap-southeast-2a", "ap-southeast-2b" ]
   name = "autoscaledappservers"
-  max_size = 1
+  max_size = 2
   min_size = 1
   health_check_grace_period = 300
   health_check_type = "ELB"
   force_delete = true
   launch_configuration = "${aws_launch_configuration.as_conf.name}"
   load_balancers = [ "${aws_elb.capability_www.name}" ]
-  vpc_zone_identifier = [ "${module.capability_dev1_net.subnet_a_id}", "${module.capability_dev1_net.subnet_b_id}" ]
+  vpc_zone_identifier = [ "${var.subnet_a_id}", "${var.subnet_b_id}" ]
 }
-
