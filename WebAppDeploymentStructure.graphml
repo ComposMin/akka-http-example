@@ -20,10 +20,15 @@
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
             <y:GroupNode>
-              <y:Geometry height="373.16420935150404" width="1062.226756320732" x="-1670.144782302935" y="150.4198484492481"/>
+              <y:Geometry height="443.82827185150404" width="1062.226756320732" x="-1670.144782302935" y="79.7557859492481"/>
               <y:Fill color="#CAECFF84" transparent="false"/>
               <y:BorderStyle color="#666699" type="dotted" width="1.0"/>
-              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#99CCFF" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="21.666015625" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="1062.226756320732" x="0.0" y="0.0"> VPC : region = ap-southeast-2</y:NodeLabel>
+              <y:NodeLabel alignment="right" autoSizePolicy="node_width" backgroundColor="#99CCFF" borderDistance="0.0" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasLineColor="false" height="92.330078125" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="1062.226756320732" x="0.0" y="0.0"> VPC
+region = ap-southeast-2
+capability_vpc_cidr="10.10.104.0/24"
+capability_subnet_a_cidr="10.10.104.0/28"
+capability_subnet_b_cidr="10.10.104.16/28"
+</y:NodeLabel>
               <y:Shape type="roundrectangle"/>
               <y:State closed="false" closedHeight="50.0" closedWidth="50.0" innerGraphDisplayEnabled="false"/>
               <y:Insets bottom="15" bottomF="15.0" left="15" leftF="15.0" right="15" rightF="15.0" top="15" topF="15.0"/>
@@ -98,7 +103,7 @@
                   <y:Geometry height="46.66666666666666" width="136.83333333333326" x="-1243.2751237926677" y="383.1006683375102"/>
                   <y:Fill color="#00CCFF" transparent="false"/>
                   <y:BorderStyle color="#000000" type="line" width="1.0"/>
-                  <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="32.265625" modelName="custom" textColor="#000000" visible="true" width="129.9765625" x="3.4283854166667425" y="7.200520833333314">AppServer2
+                  <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="32.265625" modelName="custom" textColor="#000000" visible="true" width="129.9765625" x="3.428385416666515" y="7.200520833333314">AppServer2
 (Active EC2 Intstance)<y:LabelModel>
                       <y:SmartNodeLabelModel distance="4.0"/>
                     </y:LabelModel>
@@ -151,10 +156,9 @@ Elastic Load Balancer<y:LabelModel>
       </graph>
     </node>
     <node id="n1">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="35.66666666666666" width="176.83333333333326" x="-1227.974033688652" y="82.08145363408516"/>
+          <y:Geometry height="35.66666666666666" width="176.83333333333326" x="-1227.974033688652" y="14.089119282581436"/>
           <y:Fill color="#CCCCFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="32.265625" modelName="custom" textColor="#000000" visible="true" width="126.1328125" x="25.350260416666515" y="1.7005208333333286">dev1.composmin.net
@@ -170,7 +174,6 @@ Elastic Load Balancer<y:LabelModel>
       </data>
     </node>
     <edge id="n0::e0" source="n0::n1" target="n0::n0::n0">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -189,7 +192,6 @@ Elastic Load Balancer<y:LabelModel>
       </data>
     </edge>
     <edge id="n0::e1" source="n0::n1" target="n0::n0::n1">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -208,13 +210,12 @@ Elastic Load Balancer<y:LabelModel>
       </data>
     </edge>
     <edge id="e0" source="n1" target="n0::n1">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="49.4453125" x="-54.722650225110556" y="32.35253873743801">http/80<y:LabelModel>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="49.4453125" x="-54.722650225110556" y="66.32110087076819">http/80<y:LabelModel>
               <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
             </y:LabelModel>
             <y:ModelParameter>
