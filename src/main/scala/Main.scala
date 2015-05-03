@@ -19,11 +19,14 @@ object Main extends App {
 
   import system.dispatcher
 
-  Http(system).bindAndHandle(staticFiles, "0.0.0.0", 8080)
+  Http(system).bindAndHandle(staticFiles ~ status(), "0.0.0.0", 8080)
 
-  private def staticFiles(implicit ec: ExecutionContext, mat: FlowMaterializer): Route =
+
+  private def staticFiles(): Route =
     getFromResourceDirectory("web") ~
-      path("")(getFromResource("web/index.html")) ~
-      path("status")(complete( """{ "status" : "ok" }"""))
+      path("")(getFromResource("web/index.html"))
+
+  private def status() : Route =
+    path("status")(complete( """{ "status" : "ok" }"""))
 
 }
