@@ -49,7 +49,7 @@ resource "aws_route53_record" "capability_www_dns" {
 }
 
 resource "aws_elb" "capability_www" {
-  name = "webapplicationentry"
+  name = "${var.www_dns_prefix}-elb"
   # Attaching subnets determines which VPC the ELB ends up in. Do it! Or it ends up in the default VPC
   subnets = [ "${var.subnet_a_id}", "${var.subnet_b_id}" ]
   security_groups = [ "${aws_security_group.web_standard_ports.id}" ]
@@ -70,7 +70,7 @@ resource "aws_elb" "capability_www" {
 }
 
 resource "aws_launch_configuration" "as_conf" {
-    name = "small_app_server_cluster"
+    name = "${var.www_dns_prefix}_small_app_server_cluster"
     image_id = "${var.app_server_ami}"
     instance_type = "t2.small"
     key_name = "${var.ssh_key_name}"
@@ -81,7 +81,7 @@ resource "aws_launch_configuration" "as_conf" {
 
 resource "aws_autoscaling_group" "scaleout_web_app" {
   availability_zones = [ "ap-southeast-2a", "ap-southeast-2b" ]
-  name = "autoscaledappservers"
+  name = "${var.www_dns_prefix}_autoscaledappservers"
   max_size = 2
   min_size = 1
   health_check_grace_period = 300
