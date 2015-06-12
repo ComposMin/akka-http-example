@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./terra.sh destroy -var-file=~/.aws/cfegan.tfvars  -var ssh_key_name=cfegan-cdenv -var www_dns_prefix=$1 ${@:2}

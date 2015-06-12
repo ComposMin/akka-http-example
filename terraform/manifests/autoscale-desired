@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ "X$1" == "X" ]; then
+	echo "must specific a desired size"
+	exit 1
+fi
+
+aws autoscaling set-desired-capacity --auto-scaling-group-name autoscaledappservers --desired-capacity $1

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+function usage() {
+	echo "usage: $0 <www_dns_prefix>"
+}
+
+if [ "X$1" == "X" ]; then
+	usage
+	exit 1
+fi
+
+./terra.sh apply -var-file=~/.aws/cfegan.tfvars  -var ssh_key_name=cfegan-cdenv -var www_dns_prefix=$1 ${@:2}
