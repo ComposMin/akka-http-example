@@ -1,16 +1,18 @@
+package net.composmin.akkahttp
 
+import akka.NotUsed
 import akka.stream._
-import akka.stream.scaladsl.{ Broadcast, FlowGraph, Flow }
+import akka.stream.scaladsl.{Broadcast, Flow, GraphDSL}
 
 /**
- * A custom Graph section that takes a single input and chooses which of its two outputs to
- * send it to based on a supplied predicate. NOTE: out0 is the output used when the input matches the predicate.
- */
+  * A custom Graph section that takes a single input and chooses which of its two outputs to
+  * send it to based on a supplied predicate. NOTE: out0 is the output used when the input matches the predicate.
+  */
 object Flipper {
 
-  def apply[In](p: In => Boolean): Graph[FanOutShape2[In, In, In], Unit] = {
-    FlowGraph.partial() { implicit b ⇒
-      import FlowGraph.Implicits._
+  def apply[In](p: In => Boolean): Graph[FanOutShape2[In, In, In], NotUsed] = {
+    GraphDSL.create() { implicit b ⇒
+      import GraphDSL.Implicits._
 
       // TODO: This code evaluates the predicate twice, which could be a performance problem if
       // the predicate is expensive to calculate. An improved implementation could evaluate once

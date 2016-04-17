@@ -6,7 +6,7 @@ object Common {
   val settings =
     List(
       // Core settings
-      organization := "net.composmin.poc",
+      organization := "net.composmin.akkahttp",
       version := "1.0.0",
       scalaVersion := Version.scala,
       crossScalaVersions := List(scalaVersion.value),
@@ -14,7 +14,7 @@ object Common {
         "-unchecked",
         "-deprecation",
         "-language:_",
-        "-target:jvm-1.6",
+        "-target:jvm-1.8",
         "-encoding", "UTF-8"
       ),
       unmanagedSourceDirectories in Compile := List((scalaSource in Compile).value),
