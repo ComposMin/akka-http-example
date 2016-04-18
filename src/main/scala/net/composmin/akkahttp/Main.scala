@@ -8,7 +8,6 @@ import akka.stream.ActorMaterializer
 import akka.util.Timeout
 
 import scala.concurrent.duration._
-import scala.io.StdIn
 
 object Main extends App {
   implicit val system = ActorSystem("main-system")
