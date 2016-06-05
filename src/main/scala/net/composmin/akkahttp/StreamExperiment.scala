@@ -1,20 +1,18 @@
 package net.composmin.akkahttp
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.Http.{IncomingConnection, ServerBinding}
 import akka.http.scaladsl.model.HttpMethods._
 import akka.http.scaladsl.model._
 import akka.stream._
 import akka.stream.scaladsl.{Flow, GraphDSL, Merge, Source, Zip}
-import akka.util.Timeout
 import akka.{Done, NotUsed}
 
 import scala.concurrent.Future
 import scala.concurrent.duration.{FiniteDuration, _}
 
 /**
-  * FIXME : All code in this file is currently inactive.
   * It demonstrates the use of HTTP flows to functionally transform input (HTTPRequest) to output (HTTPResponse).
   */
 object StreamExperiment {
@@ -29,30 +27,10 @@ object StreamExperiment {
     server.runForeach { (connection: IncomingConnection) =>
 
       val handler = Flow[HttpRequest].via(delayMatched(predicate)).map(Routes.requestHandler)
-
       connection.handleWith(handler)
     }
   }
 
-}
-
-
-class RequestDelayingActor extends Actor {
-  implicit val system = context.system
-  implicit val ec = system
-
-  case class DelayWrapper(replyTo: ActorRef, req: HttpRequest)
-
-  override def receive: Receive = {
-    case req@HttpRequest(GET, Uri.Path("/delayed"), _, _, _) ⇒
-      import scala.concurrent.ExecutionContext.Implicits.global
-      context.system.scheduler.scheduleOnce(2 second, self, DelayWrapper(sender(), req))
-
-    case wrap: DelayWrapper =>
-      sender ! HttpResponse(entity = "PONG!")
-
-    case req: HttpRequest ⇒ sender ! Routes.requestHandler(req)
-  }
 }
 
 
@@ -69,17 +47,6 @@ object Routes {
     case HttpRequest(GET, Uri.Path("/crash"), _, _, _) ⇒ sys.error("BOOM!")
 
     case _: HttpRequest ⇒ HttpResponse(404, entity = "Unknown resource!")
-  }
-
-  def asyncRequestHandler(system: ActorSystem): HttpRequest => Future[HttpResponse] = {
-    req => {
-      import akka.pattern.ask
-      implicit val askTimeout = Timeout(3 seconds)
-
-      val a: ActorRef = system.actorOf(Props[RequestDelayingActor])
-
-      (a ? req).mapTo[HttpResponse]
-    }
   }
 
   def predicate(httpRequest: HttpRequest): Boolean = {

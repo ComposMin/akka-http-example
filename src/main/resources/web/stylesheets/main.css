@@ -3,7 +3,7 @@
 }
 html, body {
     font-family: 'Open Sans', sans-serif;
-    background: #3F51B5;
+    background: #b52557;
     color: white;
     text-align: center;
     margin: 0;
@@ -54,6 +54,9 @@ section {
 }
 .btn--blue {
     background: #4A90E2;
+}
+.btn--red {
+    background: #e2615f;
 }
 .tile {
     width: 33.333%;
@@ -113,7 +116,7 @@ section {
     pointer-events: auto;
 }
 .dialog {
-    background: #4A90E2;
+    background: #e25154;
     min-width: 300px;
     left: 50%;
     right: auto;

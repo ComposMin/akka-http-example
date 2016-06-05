@@ -24,5 +24,7 @@ object Main extends App {
 
   val bindingFuture = Http().bindAndHandle(staticFiles ~ status, "0.0.0.0", 8080)
 
+  StreamExperiment.runServer(system, 8081)
+
   println(s"Server online at http://localhost:8080/status\n")
 }
