@@ -26,7 +26,7 @@ packageDescription := "Akka HTTP stream example"
 
 packageName in Docker := "akka-http"
 
-version in Docker := "red"
+version in Docker := "latest"
 
 dockerBaseImage := "delitescere/java"
 

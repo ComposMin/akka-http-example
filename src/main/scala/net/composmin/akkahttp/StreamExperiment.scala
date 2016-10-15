@@ -42,7 +42,7 @@ object Routes {
 
     case HttpRequest(GET, Uri.Path("/ping"), _, _, _) ⇒ HttpResponse(entity = "PONG!")
 
-    case HttpRequest(GET, Uri.Path("/blah"), _, _, _) ⇒ HttpResponse(entity = "PONG!")
+    case HttpRequest(GET, Uri.Path("/envdump"), _, _, _) ⇒ HttpResponse(entity = EnvDumper.dumpEnv())
 
     case HttpRequest(GET, Uri.Path("/crash"), _, _, _) ⇒ sys.error("BOOM!")
 
