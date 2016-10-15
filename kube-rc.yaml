@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: akka-http
+  labels:
+    app: akka-http
+  namespace: "kubens1"
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: akka-http
+    spec:
+      containers:
+      - image: composmin/akka-http:red
+        imagePullPolicy: Always
+        name: akka-http
+        env:
+        - name: INTERESTING_ENV_VAR
+          value: wibble
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8081
+          protocol: TCP
